@@ -1,36 +1,101 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Jsuper7 Tier List Checker
 
-## Getting Started
+เว็บแอปพลิเคชันสำหรับ **ตรวจสอบ Tier List ของ Jsuper7**
+ผู้ใช้สามารถกรอก **หมายเลขโทรศัพท์** เพื่อตรวจสอบระดับ Tier และข้อมูลสถานะของตนเองได้
 
-First, run the development server:
+โปรเจกต์นี้พัฒนาด้วย **Next.js** และสร้างขึ้นด้วย `create-next-app`
+
+---
+
+## 🚀 คุณสมบัติของระบบ
+
+* ตรวจสอบ Tier List ด้วยหมายเลขโทรศัพท์
+* ใช้ Next.js API Routes สำหรับการดึงข้อมูล
+* หน้าตาเว็บเรียบง่าย ใช้งานง่าย
+* รองรับการ Deploy ได้ทันที
+
+---
+
+## 🛠 เทคโนโลยีที่ใช้
+
+* **Next.js**
+* **React**
+* **Node.js**
+* **JavaScript**
+* **CSS**
+
+---
+
+## 📦 การเริ่มต้นใช้งาน
+
+ติดตั้ง dependencies ก่อน
+
+```bash
+npm install
+```
+
+จากนั้นรันเซิร์ฟเวอร์สำหรับพัฒนา
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+เปิดเว็บเบราว์เซอร์แล้วไปที่
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+คุณสามารถแก้ไขหน้าเว็บได้ที่ไฟล์
 
-## Learn More
+```
+app/page.js
+```
 
-To learn more about Next.js, take a look at the following resources:
+เมื่อมีการแก้ไขไฟล์ หน้าเว็บจะอัปเดตอัตโนมัติ
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📁 โครงสร้างโปรเจกต์
 
-## Deploy on Vercel
+```
+app/
+ ├─ api/
+ │   └─ check/
+ │       └─ route.js
+ ├─ page.js
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+public/
+ └─ logo.png
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🌐 การ Deploy
+
+วิธีที่ง่ายที่สุดในการ deploy โปรเจกต์ Next.js คือใช้ **Vercel**
+
+ขั้นตอน
+
+1. Push โปรเจกต์ขึ้น GitHub
+2. เชื่อม repository กับ Vercel
+3. Deploy ได้ทันที
+
+---
+
+## 📚 ศึกษาเพิ่มเติมเกี่ยวกับ Next.js
+
+เอกสาร Next.js
+https://nextjs.org/docs
+
+คอร์สเรียน Next.js
+https://nextjs.org/learn
+
+---
+
+## 👨‍💻 ผู้พัฒนา
+
+พัฒนาโดย **TeamAFF JKnowledge**
+
+---
+
