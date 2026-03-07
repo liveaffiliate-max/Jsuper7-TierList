@@ -2,47 +2,76 @@
 
 import { useState } from "react";
 
-export default function Home() {
+import Swal from "sweetalert2";
 
+export default function Home() {
   const [error, setError] = useState("");
 
-const ALL_TIERS = ["Start", "Speed", "Super", "Star"];
+  const ALL_TIERS = ["Start", "Speed", "Super", "Star"];
 
-const TIER_CONFIG = {
-  Start: {
-    icon: "🚩",
-    bg: "#f1f5f9",
-    border: "#cbd5f5",
-    color: "#475569",
-    range: "0 - 9,999 บาท"
-  },
-  Speed: {
-    icon: "⚡",
-    bg: "#e0f2fe",
-    border: "#7dd3fc",
-    color: "#0284c7",
-    range: "10,000 - 49,999 บาท"
-  },
-  Super: {
-    icon: "🚀",
-    bg: "#fef9c3",
-    border: "#fde047",
-    color: "#ca8a04",
-    range: "50,000 - 199,999 บาท"
-  },
-  Star: {
-    icon: "⭐",
-    bg: "#ede9fe",
-    border: "#c4b5fd",
-    color: "#7c3aed",
-    range: "200,000+ บาท"
-  }
-};
+  const TIER_CONFIG = {
+    Start: {
+      icon: "🚩",
+      bg: "#f1f5f9",
+      border: "#cbd5f5",
+      color: "#475569",
+      range: "0 - 9,999 บาท",
+    },
+    Speed: {
+      icon: "⚡",
+      bg: "#e0f2fe",
+      border: "#7dd3fc",
+      color: "#0284c7",
+      range: "10,000 - 49,999 บาท",
+    },
+    Super: {
+      icon: "🚀",
+      bg: "#fef9c3",
+      border: "#fde047",
+      color: "#ca8a04",
+      range: "50,000 - 199,999 บาท",
+    },
+    Star: {
+      icon: "⭐",
+      bg: "#ede9fe",
+      border: "#c4b5fd",
+      color: "#7c3aed",
+      range: "200,000+ บาท",
+    },
+  };
 
   const [phone, setPhone] = useState("");
   const [user, setUser] = useState(null);
 
   const checkUser = async () => {
+    if (!phone) {
+      Swal.fire({
+        icon: "warning",
+        title: "กรุณากรอกเบอร์โทร",
+        text: "โปรดกรอกเบอร์โทรศัพท์ก่อนตรวจสอบ",
+        confirmButtonColor: "#2563eb",
+      });
+      return;
+    }
+
+    if (phone.length !== 10) {
+      Swal.fire({
+        icon: "error",
+        title: "เบอร์โทรไม่ถูกต้อง",
+        text: "กรุณากรอกเบอร์โทร 10 หลัก",
+        confirmButtonColor: "#ef4444",
+      });
+      return;
+    }
+
+    Swal.fire({
+      title: "กำลังตรวจสอบข้อมูล",
+      text: "กรุณารอสักครู่...",
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
 
     const res = await fetch("/api/check", {
       method: "POST",
@@ -53,6 +82,27 @@ const TIER_CONFIG = {
     });
 
     const data = await res.json();
+
+    Swal.close();
+
+    if (!data.found) {
+      Swal.fire({
+        icon: "error",
+        title: "ไม่พบข้อมูลสมาชิก",
+        text: "กรุณาตรวจสอบเบอร์โทรอีกครั้ง",
+        confirmButtonColor: "#ef4444",
+      });
+      return;
+    }
+
+    Swal.fire({
+      icon: "success",
+      title: "พบข้อมูลสมาชิก",
+      text: "กำลังเข้าสู่หน้าข้อมูลสมาชิก",
+      timer: 1500,
+      showConfirmButton: false,
+    });
+
     setUser(data);
   };
 
@@ -69,46 +119,108 @@ const TIER_CONFIG = {
         }
 
         .page {
-          min-height: 100vh;
-          background: linear-gradient(155deg, #1a3a5c 0%, #1e5799 55%, #2980b9 100%);
-          padding: 40px 20px 56px;
-          font-family: 'Prompt', sans-serif;
-        }
+  min-height: 100vh;
 
-        .searchBox {
-          background: white;
-          padding: 38px 34px;
-          border-radius: 22px;
-          max-width: 500px;
-          margin: 64px auto 0;
-          text-align: center;
-          box-shadow: 0 24px 64px rgba(0,0,0,0.22);
-          animation: fadeUp 0.45s ease;
-        }
-        .searchBox-logo { font-size: 42px; margin-bottom: 10px; }
-        .searchBox-title { font-size: 21px; font-weight: 700; color: #1e3a5f; margin-bottom: 3px; }
-        .searchBox-sub { font-size: 13px; color: #94a3b8; margin-bottom: 24px; }
-        .searchBox h3 {
-          font-size: 13px; font-weight: 600; color: #475569;
-          text-align: left; margin-bottom: 8px;
-        }
+  background: url("/bg_jsuper7.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
-        .searchRow { display: flex; gap: 10px; margin-top: 0; }
-        .searchRow input {
-          flex: 1; padding: 13px 16px; border-radius: 12px;
-          border: 2px solid #e2e8f0; font-size: 15px;
-          font-family: 'Prompt', sans-serif; color: #1e293b;
-          outline: none; transition: border-color 0.2s;
-        }
-        .searchRow input:focus { border-color: #3b82f6; }
-        .searchRow button {
-          padding: 13px 20px; border-radius: 12px; border: none;
-          background: linear-gradient(135deg, #2563eb, #3b82f6);
-          color: white; cursor: pointer; font-size: 14px; font-weight: 600;
-          font-family: 'Prompt', sans-serif; white-space: nowrap;
-          box-shadow: 0 4px 14px rgba(59,130,246,0.35); transition: all 0.2s;
-        }
-        .searchRow button:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(59,130,246,0.45); }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-family: 'Prompt', sans-serif;
+
+  padding: 40px 20px 56px;
+}
+
+.searchBox{
+  width: 520px;
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 24px;
+
+  text-align: center;
+
+  box-shadow: 
+    0 10px 30px rgba(0,0,0,0.15),
+    0 2px 8px rgba(0,0,0,0.08);
+}
+
+.searchBox-logo { 
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.searchBox-logo img{
+  width:350px;
+  max-width:100%;
+  height:auto;
+}
+
+.searchBox-title { 
+  font-size: 26px; 
+  font-weight: 700; 
+  color: #1e3a5f; 
+  margin-bottom: 3px; 
+}
+
+.searchBox-sub { 
+  font-size: 16px; 
+  color: #94a3b8; 
+  margin-bottom: 24px; 
+}
+
+.searchBox h3 {
+  font-size: 13px; 
+  font-weight: 600; 
+  color: #475569;
+  text-align: left; 
+  margin-bottom: 8px;
+}
+
+.searchRow { 
+  display: flex; 
+  gap: 10px; 
+}
+
+.searchRow input {
+  flex: 1; 
+  padding: 13px 16px; 
+  border-radius: 12px;
+  border: 2px solid #e2e8f0; 
+  font-size: 15px;
+  font-family: 'Prompt', sans-serif; 
+  color: #1e293b;
+  outline: none; 
+  transition: border-color 0.2s;
+}
+
+.searchRow input:focus { 
+  border-color: #5BC271; 
+}
+
+.searchRow button {
+  padding: 13px 20px; 
+  border-radius: 12px; 
+  border: none;
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  color: white; 
+  cursor: pointer; 
+  font-size: 14px; 
+  font-weight: 600;
+  font-family: 'Prompt', sans-serif; 
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(59,130,246,0.35); 
+  transition: all 0.2s;
+}
+
+.searchRow button:hover { 
+  transform: translateY(-1px); 
+  box-shadow: 0 6px 20px rgba(59,130,246,0.45); 
+}
 
         .dashboard { max-width: 860px; margin: 0 auto; animation: fadeUp 0.45s ease; }
 
@@ -227,75 +339,167 @@ const TIER_CONFIG = {
   background:#ef4444;
   color:white;
 }
+
+/* -------- TABLET -------- */
+
+@media (max-width: 1024px){
+
+  .dashboard{
+    max-width:95%;
+  }
+
+  .searchBox{
+    width:100%;
+    max-width:520px;
+  }
+
+}
+
+/* -------- MOBILE -------- */
+
+@media (max-width: 768px){
+
+  .page{
+    padding:24px 16px 40px;
+  }
+
+  .searchBox{
+    width:100%;
+    padding:26px 18px;
+    border-radius:18px;
+  }
+
+  .searchBox-logo img{
+    width:200px;
+  }
+
+  .searchBox-title{
+    font-size:22px;
+  }
+
+  .searchBox-sub{
+    font-size:14px;
+  }
+
+  .searchRow{
+    flex-direction:column;
+  }
+
+  .searchRow input{
+    width:100%;
+    font-size:16px;
+  }
+
+  .searchRow button{
+    width:100%;
+    font-size:16px;
+  }
+
+  /* profile */
+
+  .profileCard{
+    flex-direction:column;
+    text-align:center;
+    padding:20px;
+  }
+
+  .profileCard img{
+    width:80px;
+    height:80px;
+  }
+
+  .profileCard h2{
+    font-size:20px;
+  }
+
+  .total{
+    text-align:center;
+  }
+
+  .total h1{
+    font-size:26px;
+  }
+
+  /* cards */
+
+  .cards{
+    grid-template-columns:1fr;
+  }
+
+  .card img{
+    width:80px;
+    margin:0 auto 10px;
+  }
+
+  .card h2{
+    font-size:20px;
+  }
+
+  /* tier */
+
+  .tier-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+}
+
+}
       `}</style>
 
       <div className="page">
-
         {/* Search Box */}
 
         {!user && (
           <div className="searchBox">
-            <div className="searchBox-logo">📊</div>
+            <div className="searchBox-logo">
+              <img src="/logo.png" alt="Jsuper7 Logo" />
+            </div>
             <div className="searchBox-title">ตรวจสอบข้อมูลสมาชิก</div>
-            <div className="searchBox-sub">JSUPER7 Membership System</div>
+            <div className="searchBox-sub">JSUPER7 Membership</div>
 
-            <h3>📱 เบอร์ที่ใช้ลงทะเบียน</h3>
+            <h3>📞 เบอร์ที่ใช้ลงทะเบียน</h3>
 
             <div className="searchRow">
               <input
-                placeholder="0812345678"
+                placeholder="09xxxxxxxx"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && checkUser()}
               />
 
-              <button onClick={checkUser}>
-                ตรวจสอบข้อมูล
-              </button>
+              <button onClick={checkUser}>ตรวจสอบข้อมูล</button>
             </div>
-
           </div>
         )}
 
         {/* Dashboard */}
 
         {user && user.found && (
-
           <div className="dashboard">
-
             {/* Profile */}
 
             <div className="profileCard">
-
-              <img
-                src={user.profile}
-              />
+              <img src={user.profile} alt="profile" />
 
               <div>
-
                 <h2>{user.fullname}</h2>
 
                 <p>📱 {user.phone}</p>
 
-                <div className="tier">
-                  ⚡ ระดับ {user.tier}
-                </div>
-
+                <div className="tier">⚡ ระดับ {user.tier}</div>
               </div>
 
               <div className="total">
                 <p>ยอดขายรวม</p>
                 <h1>฿{user.total_sale}</h1>
               </div>
-
             </div>
-
 
             {/* Sale Cards */}
 
             <div className="cards">
-
               <div className="card">
+                <img src="/logo_jknow.png" alt="JKnowledge" />
                 <h3>หนังสือเตรียมสอบมหาลัย</h3>
                 <p>(Tiktok)</p>
 
@@ -303,6 +507,7 @@ const TIER_CONFIG = {
               </div>
 
               <div className="card">
+                <img src="/logo_jkorpor.png" alt="Jkorpor" />
                 <h3>หนังสือเตรียมสอบราชการ</h3>
                 <p>(Tiktok)</p>
 
@@ -310,83 +515,63 @@ const TIER_CONFIG = {
               </div>
 
               <div className="card">
+                <img src="/logo_shopee.png" alt="Shopee" />
                 <h3>หนังสือเตรียมสอบมหาลัย</h3>
                 <p>(Shopee)</p>
 
                 <h2>฿{user.shopee}</h2>
               </div>
-
             </div>
 
             {/* Tier Info */}
 
-<div className="tier-section">
+            <div className="tier-section">
+              <div className="ts-title">📊 เกณฑ์ระดับยอดขายในการจัด Tier</div>
 
-  <div className="ts-title">
-    📊 เกณฑ์ระดับยอดขายในการจัด Tier
-  </div>
+              <div className="tier-grid">
+                {ALL_TIERS.map((t) => {
+                  const cfg = TIER_CONFIG[t];
+                  const isActive = user.tier === t;
 
-  <div className="tier-grid">
+                  return (
+                    <div
+                      key={t}
+                      className={`tier-item ${isActive ? "active" : ""}`}
+                      style={{
+                        background: cfg.bg,
+                        borderColor: isActive ? cfg.color : cfg.border,
+                      }}
+                    >
+                      <div className="ti-icon">{cfg.icon}</div>
 
-    {ALL_TIERS.map((t) => {
+                      <div className="ti-name" style={{ color: cfg.color }}>
+                        {t}
+                      </div>
 
-      const cfg = TIER_CONFIG[t];
-      const isActive = user.tier === t;
+                      <div className="ti-range" style={{ color: cfg.color }}>
+                        {cfg.range}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
 
-      return (
+            {/* Logout */}
 
-        <div
-          key={t}
-          className={`tier-item ${isActive ? "active" : ""}`}
-          style={{
-            background: cfg.bg,
-            borderColor: isActive ? cfg.color : cfg.border
-          }}
-        >
-
-          <div className="ti-icon">{cfg.icon}</div>
-
-          <div className="ti-name" style={{ color: cfg.color }}>
-            {t}
+            <button
+              className="logout-btn"
+              onClick={() => {
+                setUser(null);
+                setPhone("");
+                setError("");
+              }}
+            >
+              ออกจากระบบ
+            </button>
           </div>
-
-          <div className="ti-range" style={{ color: cfg.color }}>
-            {cfg.range}
-          </div>
-
-        </div>
-
-      );
-    })}
-
-  </div>
-
-</div>
-
-{/* Logout */}
-
-<button
-  className="logout-btn"
-  onClick={() => {
-    setUser(null);
-    setPhone("");
-    setError("");
-  }}
->
-  ออกจากระบบ
-</button>
-
-          </div>
-
         )}
-
-        
-
-        
-
       </div>
     </>
-    
   );
-  
 }
