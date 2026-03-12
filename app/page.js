@@ -1,54 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { TIER_CONFIG, ALL_TIERS } from "./lib/tierConfig"
 import TierProgress from "./components/TierProgress";
+import TierListDetail from "./components/TierListdetail";
 
 import Swal from "sweetalert2";
 
 export default function Home() {
   const [error, setError] = useState("");
-
-  const ALL_TIERS = ["Start", "Speed", "Super", "Star"];
-
-  const TIER_CONFIG = {
-    Start: {
-      icon: "🚩",
-      min: 0,
-      max: 9999,
-      bg: "#f1f5f9",
-      border: "#cbd5f5",
-      color: "#475569",
-      range: "0 - 9,999 บาท",
-    },
-    Speed: {
-      icon: "⚡",
-      min: 10000,
-      max: 49999,
-      bg: "#e0f2fe",
-      border: "#7dd3fc",
-      color: "#0284c7",
-      range: "10,000 - 49,999 บาท",
-    },
-    Super: {
-      icon: "🚀",
-      min: 50000,
-      max: 199999,
-      bg: "#fef9c3",
-      border: "#fde047",
-      color: "#ca8a04",
-      range: "50,000 - 199,999 บาท",
-    },
-    Star: {
-      icon: "⭐",
-      min: 200000,
-      max: 9999999,
-      bg: "#ede9fe",
-      border: "#c4b5fd",
-      color: "#7c3aed",
-      range: "200,000+ บาท",
-    },
-  };
-
   const [phone, setPhone] = useState("");
   const [user, setUser] = useState(null);
 
@@ -168,7 +128,7 @@ export default function Home() {
         .page {
   min-height: 100vh;
 
-  background: url("/bg_jsuper7.png");
+  background: url("/website.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -557,8 +517,6 @@ export default function Home() {
                 <h2>{user.fullname}</h2>
                 <p>📞 {user.phone}</p>
                 <div className="tier"> ระดับ {user.tier}</div>
-
-                
               </div>
 
               <div className="total">
@@ -568,11 +526,11 @@ export default function Home() {
             </div>
 
             {/* Progress to next tier */}
-                <TierProgress
-  totalSale={user.total_sale}
-  getTierInfo={getTierInfo}
-  TIER_CONFIG={TIER_CONFIG}
-/>
+            <TierProgress
+              totalSale={user.total_sale}
+              getTierInfo={getTierInfo}
+              TIER_CONFIG={TIER_CONFIG}
+            />
 
             {/* Sale Cards */}
 
@@ -604,37 +562,7 @@ export default function Home() {
 
             {/* Tier Info */}
 
-            <div className="tier-section">
-              <div className="ts-title">📊 เกณฑ์ระดับยอดขายในการจัด Tier</div>
-
-              <div className="tier-grid">
-                {ALL_TIERS.map((t) => {
-                  const cfg = TIER_CONFIG[t];
-                  const isActive = user.tier === t;
-
-                  return (
-                    <div
-                      key={t}
-                      className={`tier-item ${isActive ? "active" : ""}`}
-                      style={{
-                        background: cfg.bg,
-                        borderColor: isActive ? cfg.color : cfg.border,
-                      }}
-                    >
-                      <div className="ti-icon">{cfg.icon}</div>
-
-                      <div className="ti-name" style={{ color: cfg.color }}>
-                        {t}
-                      </div>
-
-                      <div className="ti-range" style={{ color: cfg.color }}>
-                        {cfg.range}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+            <TierListDetail user={user} />
 
             {/* Logout */}
 

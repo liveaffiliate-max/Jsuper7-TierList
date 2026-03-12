@@ -1,4 +1,5 @@
 import React from "react";
+import { TIER_CONFIG, ALL_TIERS } from "../lib/tierConfig";
 
 export default function TierProgress({ totalSale, getTierInfo, TIER_CONFIG }) {
   const info = getTierInfo(totalSale);

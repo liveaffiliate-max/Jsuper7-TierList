@@ -19,13 +19,13 @@ export async function POST(req) {
 
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.SHEET_ID,
-      range: "Sheet1!A:K",
+      range: "ลงเว็บ!A:N",
     });
 
     const rows = response.data.values || [];
 
-    // หา row ที่เบอร์ตรงกัน (คอลัมน์ C = index 2)
-    const user = rows.find((row) => row[2] === phone);
+    // หา row ที่เบอร์ตรงกัน (คอลัมน์ D = index 3)
+    const user = rows.find((row) => row[3] === phone);
 
     if (!user) {
       return Response.json({ found: false });
@@ -33,17 +33,22 @@ export async function POST(req) {
 
     return Response.json({
       found: true,
-      fullname: user[0],
-      nickname: user[1],
-      phone: user[2],
-      line: user[3],
-      tiktok: user[4],
-      sale_uni: user[5],
-      sale_exam: user[6],
-      shopee: user[7],
-      tier: user[8],
-      total_sale: user[9],
-      profile: user[10],
+
+      fullname: user[1],
+      nickname: user[2],
+      phone: user[3],
+      line: user[4],
+
+      tiktok: user[5],
+      profile: user[6],
+
+      sale_uni: user[7],
+      sale_exam: user[8],
+      shopee: user[9],
+      tier: user[10],
+
+      total_sale: user[11],
+      
     });
 
   } catch (error) {
