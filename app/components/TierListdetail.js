@@ -319,6 +319,8 @@ export default function TierListDetail({ user }) {
                   </div>
                 </div>
 
+                
+
                 {/* Reward */}
                 <div className="tpc-section">
                   <div className="tpc-section-label">🎁 Reward</div>
@@ -344,6 +346,35 @@ export default function TierListDetail({ user }) {
                     ))}
                   </div>
                 </div>
+                {/* Form Button */}
+{cfg.form && (
+  <a
+    href={cfg.form}
+    target="_blank"
+    rel="noopener noreferrer"
+    style={{
+      display: "block",
+      width: "100%",
+      padding: "10px",
+      borderRadius: "12px",
+      marginTop: "6px",
+      textAlign: "center",
+      fontFamily: "'Kanit', sans-serif",
+      fontSize: "14px",
+      fontWeight: 600,
+      color: cfg.color,
+      background: `${cfg.color}15`,
+      border: `1.5px solid ${cfg.color}55`,
+      textDecoration: "none",
+      boxSizing: "border-box",
+      transition: "background 0.15s",
+    }}
+    onMouseEnter={(e) => (e.currentTarget.style.background = `${cfg.color}28`)}
+    onMouseLeave={(e) => (e.currentTarget.style.background = `${cfg.color}15`)}
+  >
+    📋 กรอกฟอร์มส่งคลิป
+  </a>
+)}
 
                 <button
                   className="tpc-close-btn"

@@ -18,6 +18,7 @@ export const TIER_CONFIG = {
       "ทำคอนเทนต์ขึ้นชมเพิ่ม Awareness",
       "J affiliate coaching ตรงจากแบรนด์ให้ฟรี",
     ],
+    form:"https://forms.gle/b69AmZ2mFoRvKRmC8",
     discount: null,
   },
   Speed: {
@@ -37,6 +38,7 @@ export const TIER_CONFIG = {
       "ทำคอนเทนต์ขึ้นชมเพิ่ม Awareness",
       "J affiliate coaching ตรงจากแบรนด์ให้ฟรี",
     ],
+    form:"https://forms.gle/WkV2V1KH5Zt2EfpXA",
     discount: null,
   },
   Super: {
@@ -60,6 +62,7 @@ export const TIER_CONFIG = {
       "ทำคอนเทนต์ขึ้นชมเพิ่ม Awareness",
       "J affiliate coaching ตรงจากแบรนด์ให้ฟรี",
     ],
+    form:"https://forms.gle/knn4HyP8S6JEFvs58",
     discount: "ส่วนลดต่าง ๆ (คูปอง/แฟลชเซลล์ เฉพาะบุคคล)",
   },
   Star: {
@@ -83,6 +86,7 @@ export const TIER_CONFIG = {
       "ทำคอนเทนต์ขึ้นชมเพิ่ม Awareness",
       "J affiliate coaching ตรงจากแบรนด์ให้ฟรี",
     ],
+    form:"https://forms.gle/iLzZB3myqw6gs7hR6",
     discount: "ส่วนลดต่าง ๆ (คูปอง/แฟลชเซลล์ เฉพาะบุคคล)",
   },
 };

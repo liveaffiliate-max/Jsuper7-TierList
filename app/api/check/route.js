@@ -33,19 +33,49 @@ export async function POST(req) {
       auth,
     });
 
-    const response = await sheets.spreadsheets.values.get({
-      spreadsheetId: process.env.SHEET_ID,
-      range: `${sheetName}!A:N`,
+    let rows = [];
+
+try {
+
+  const response = await sheets.spreadsheets.values.get({
+    spreadsheetId: process.env.SHEET_ID,
+    range: `${sheetName}!A:N`,
+  });
+
+  rows = response.data.values || [];
+
+} catch (err) {
+
+  // ถ้าไม่มี sheet
+  if (err.message.includes("Unable to parse range")) {
+
+    return Response.json({
+      found: false,
+      noData: true,
+      month: monthName,
+      sheet: sheetName
     });
 
-    const rows = response.data.values || [];
+  }
+
+  throw err;
+
+}
+    console.log("sheet:", sheetName);
+
+    // const rows = response.data.values || [];
 
     // หา row ที่เบอร์ตรงกัน (คอลัมน์ D = index 3)
     const user = rows.find((row) => row[3] === phone);
 
     if (!user) {
-      return Response.json({ found: false });
-    }
+  return Response.json({
+    found:false,
+    noData:true,
+    month:monthName,
+    sheet:sheetName
+  });
+}
 
     return Response.json({
       found: true,
