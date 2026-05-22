@@ -855,32 +855,6 @@ export default function Home() {
               {/* Tier Info */}
               <TierListDetail user={user} />
 
-              {/* Sale Cards */}
-              <div className="cards">
-                <div className="card">
-                  <img src="/logo_jknow.png" alt="JKnowledge" />
-                  <h3>หนังสือเตรียมสอบมหาลัย</h3>
-                  <p>(Tiktok)</p>
-                  <h2>฿{user.sale_uni}</h2>
-                </div>
-
-                <div className="card">
-                  <img src="/logo_jkorpor.png" alt="Jkorpor" />
-                  <h3>หนังสือเตรียมสอบราชการ</h3>
-                  <p>(Tiktok)</p>
-                  <h2>฿{user.sale_exam}</h2>
-                </div>
-
-                <div className="card">
-                  <img src="/logo_shopee.png" alt="Shopee" />
-                  <h3>JKnowledge Shop</h3>
-                  <p>(Shopee)</p>
-                  <h2>฿{user.shopee}</h2>
-                </div>
-              </div>
-
-              {/* Tier Info */}
-              <TierListDetail user={user} />
 
             </div>
             {/* end dashboard-wrap */}
