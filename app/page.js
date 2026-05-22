@@ -10,46 +10,46 @@ import Swal from "sweetalert2";
 export default function Home() {
   const [error, setError] = useState("");
   const [phone, setPhone] = useState("");
-  
+
   const [monthOffset, setMonthOffset] = useState(0);
   const [user, setUser] = useState(null);
   const [isEmpty, setIsEmpty] = useState(false);
   const [monthLoading, setMonthLoading] = useState(false);
 
   const TH_MONTHS = {
-  Jan: "มกราคม",
-  Feb: "กุมภาพันธ์",
-  Mar: "มีนาคม",
-  Apr: "เมษายน",
-  May: "พฤษภาคม",
-  Jun: "มิถุนายน",
-  Jul: "กรกฎาคม",
-  Aug: "สิงหาคม",
-  Sep: "กันยายน",
-  Oct: "ตุลาคม",
-  Nov: "พฤศจิกายน",
-  Dec: "ธันวาคม",
-};
+    Jan: "มกราคม",
+    Feb: "กุมภาพันธ์",
+    Mar: "มีนาคม",
+    Apr: "เมษายน",
+    May: "พฤษภาคม",
+    Jun: "มิถุนายน",
+    Jul: "กรกฎาคม",
+    Aug: "สิงหาคม",
+    Sep: "กันยายน",
+    Oct: "ตุลาคม",
+    Nov: "พฤศจิกายน",
+    Dec: "ธันวาคม",
+  };
 
-const getThaiMonth = (month) => {
-  return TH_MONTHS[month] || month;
-};
+  const getThaiMonth = (month) => {
+    return TH_MONTHS[month] || month;
+  };
 
   const getMonthLabel = () => {
 
-  const now = new Date();
+    const now = new Date();
 
-  const target = new Date(
-    now.getFullYear(),
-    now.getMonth() + monthOffset
-  );
+    const target = new Date(
+      now.getFullYear(),
+      now.getMonth() + monthOffset
+    );
 
-  return target.toLocaleString("en-US", {
-    month: "short",
-    year: "numeric",
-  });
+    return target.toLocaleString("en-US", {
+      month: "short",
+      year: "numeric",
+    });
 
-};
+  };
 
   const checkUser = async () => {
     if (!phone) {
@@ -136,11 +136,11 @@ const getThaiMonth = (month) => {
       setUser(data);
     }
 
-    if(data.noData){
+    if (data.noData) {
       Swal.fire({
-        icon:"info",
-        title:`ไม่มีข้อมูลเดือน ${getThaiMonth(data.month)}`,
-        text:"ยังไม่มีข้อมูลยอดขายสำหรับเดือนนี้"
+        icon: "info",
+        title: `ไม่มีข้อมูลเดือน ${getThaiMonth(data.month)}`,
+        text: "ยังไม่มีข้อมูลยอดขายสำหรับเดือนนี้"
       });
       return;
     }
@@ -426,54 +426,174 @@ const getThaiMonth = (month) => {
         }
 
         .profileCard {
-          background: white; border-radius: 20px; padding: 24px 28px;
-          display: flex; align-items: center; justify-content: space-between;
-          margin-bottom: 18px; box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-          gap: 20px; flex-wrap: wrap;
-          transition: opacity 0.3s;
-        }
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 18px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+  display: flex;
+  transition: opacity 0.3s;
+}
 
-        .profileCard.loading-blur {
-          pointer-events: none;
-        }
+.profileCard.loading-blur { pointer-events: none; }
 
-        .profileCard img {
-          width: 70px; height: 70px; border-radius: 50%;
-          object-fit: cover; flex-shrink: 0;
-          box-shadow: 0 4px 14px rgba(0,0,0,0.15);
-        }
-        .profileCard > div:nth-child(2) { flex: 1; min-width: 140px; }
-        .profileCard h2 { font-size: 24px; font-weight: 800; color: #000000; margin-bottom: 4px; }
-        .profileCard p {color: #000000;}
-        .profileCard > div:nth-child(2) > p { font-size: 18px; font-weight: 600; color: #000000; margin-bottom: 10px; }
+.tier-panel {
+  width: 190px;
+  min-width: 190px;
+  background: linear-gradient(160deg, #1a9e7a, #0d7a5f);
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  position: relative;
+  overflow: hidden;
+}
 
-        .tier {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          background: linear-gradient(135deg, #2563eb, #3b82f6);
-          color: white;
-          padding: 10px 18px;
-          border-radius: 999px;
-          font-size: 20px;
-          font-weight: 700;
-          letter-spacing: 0.3px;
-          box-shadow:
-            0 4px 12px rgba(37, 99, 235, 0.35),
-            inset 0 1px 0 rgba(255,255,255,0.3);
-          margin-top: 16px;
-        }
+.tier-panel::before {
+  content: '';
+  position: absolute;
+  top: -50px; right: -50px;
+  width: 130px; height: 130px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.07);
+  pointer-events: none;
+}
 
-        .total { text-align: right; }
-        .total p { font-size: 12px; color: #94a3b8; margin-bottom: 4px; }
-        .total h1 { font-size: 32px; font-weight: 800; color: #16a34a; letter-spacing: -0.5px; }
+.tier-panel::after {
+  content: '';
+  position: absolute;
+  bottom: -35px; left: -25px;
+  width: 100px; height: 100px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+  pointer-events: none;
+}
+
+.tier-top-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.65);
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.tier-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.bolt-icon {
+  width: 34px; height: 34px;
+  background: #f97316;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.tier-name-text {
+  font-size: 28px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.info-panel {
+  flex: 1;
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.member-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  margin-bottom: 4px;
+}
+
+.member-name {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.2;
+  margin-bottom: 5px;
+}
+
+.member-phone {
+  font-size: 13px;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.stat-boxes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.stat-box {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 10px 12px;
+  border: 1.5px solid #e2e8f0;
+  border-left: 4px solid transparent;
+}
+
+.stat-box.sales { border-left-color: #0d7a5f; }
+.stat-box.clips { border-left-color: #2563eb; }
+
+.stat-box-label {
+  font-size: 10.5px;
+  color: #94a3b8;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.stat-box-label span.dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.stat-box.sales .dot { background: #0d7a5f; }
+.stat-box.clips .dot { background: #2563eb; }
+
+.stat-box-value {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1;
+}
+
+.stat-box-unit {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 2px;
+}
 
         .cards {
           display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px;
         }
         @media (max-width: 620px) {
           .cards { grid-template-columns: 1fr; }
-          .profileCard { flex-direction: column; text-align: center; }
           .total { text-align: center; }
         }
         .card {
@@ -573,9 +693,13 @@ const getThaiMonth = (month) => {
           .searchRow{ flex-direction:column; }
           .searchRow input{ width:100%; font-size:16px; }
           .searchRow button{ width:100%; font-size:16px; }
-          .profileCard{ flex-direction:column; text-align:center; padding:20px; }
-          .profileCard img{ width:80px; height:80px; }
-          .profileCard h2{ font-size:20px; }
+          .profileCard{ flex-direction:column; }
+          .tier-panel{ width:100%; min-width:unset; flex-direction:row; align-items:center; gap:14px; padding:14px 18px; }
+          .tier-top-label{ margin-bottom:0; font-size:10px; }
+          .tier-name-text{ font-size:22px; }
+          .info-panel{ padding:14px 16px; justify-content:flex-start; gap:12px; }
+          .member-name{ font-size:18px; }
+          .stat-boxes{ margin-top:0; }
           .total{ text-align:center; }
           .total h1{ font-size:26px; }
           .cards{ grid-template-columns:1fr; }
@@ -650,6 +774,8 @@ const getThaiMonth = (month) => {
             <div className="dashboard-wrap">
 
               {/* Loading overlay */}
+              
+              {/* Loading overlay */}
               {monthLoading && (
                 <div className="dashboard-overlay">
                   <div className="overlay-spinner" />
@@ -659,24 +785,75 @@ const getThaiMonth = (month) => {
 
               {/* Profile */}
               <div className={`profileCard${monthLoading ? " loading-blur" : ""}`}>
-                <div style={{ flex: 1, minWidth: 140 }}>
-                  <h2>{user.fullname}</h2>
-                  <p>📞 {user.phone}</p>
-                  <div className="tier">ระดับ {user.tier}</div>
+
+                {/* Left: Tier Panel */}
+                <div className="tier-panel">
+                  <div className="tier-top-label">JSUPER7 · ระดับ</div>
+                  <div className="tier-name-row">
+                    <div className="tier-name-text">{user.tier}</div>
+                  </div>
                 </div>
 
-                <div className="total">
-                  <p>ยอดขายรวม</p>
-                  <h1>฿{user.total_sale}</h1>
+                {/* Right: Info Panel */}
+                <div className="info-panel">
+                  <div>
+                    <div className="member-tag">Member</div>
+                    <div className="member-name">{user.fullname}</div>
+                    <div className="member-phone">📞 {user.phone}</div>
+                  </div>
+
+                  <div className="stat-boxes">
+                    <div className="stat-box sales">
+                      <div className="stat-box-label">
+                        <span className="dot" />
+                        ยอดขายเดือน{getThaiMonth(user.month)}
+                      </div>
+                      <div className="stat-box-value">฿{user.total_sale}</div>
+                    </div>
+                    <div className="stat-box clips">
+                      <div className="stat-box-label">
+                        <span className="dot" />
+                        คลิปสะสม
+                      </div>
+                      <div className="stat-box-value">{user.total_clip}</div>
+                      <div className="stat-box-unit">คลิปที่ผ่านเงื่อนไขของเดือน {getThaiMonth(user.month)}</div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              {/* Progress to next tier */}
               <TierProgress
                 totalSale={user.total_sale}
                 getTierInfo={getTierInfo}
                 TIER_CONFIG={TIER_CONFIG}
               />
+
+              {/* Sale Cards */}
+              <div className="cards">
+                <div className="card">
+                  <img src="/logo_jknow.png" alt="JKnowledge" />
+                  <h3>หนังสือเตรียมสอบมหาลัย</h3>
+                  <p>(Tiktok)</p>
+                  <h2>฿{user.sale_uni}</h2>
+                </div>
+
+                <div className="card">
+                  <img src="/logo_jkorpor.png" alt="Jkorpor" />
+                  <h3>หนังสือเตรียมสอบราชการ</h3>
+                  <p>(Tiktok)</p>
+                  <h2>฿{user.sale_exam}</h2>
+                </div>
+
+                <div className="card">
+                  <img src="/logo_shopee.png" alt="Shopee" />
+                  <h3>JKnowledge Shop</h3>
+                  <p>(Shopee)</p>
+                  <h2>฿{user.shopee}</h2>
+                </div>
+              </div>
+
+              {/* Tier Info */}
+              <TierListDetail user={user} />
 
               {/* Sale Cards */}
               <div className="cards">

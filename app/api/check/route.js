@@ -96,7 +96,9 @@ try {
       shopee: user[9],
       tier: user[10],
 
-      total_sale: user[11],
+      total_sale: user[11]?? 0,
+
+      total_clip: user[12] ?? 0,
 
     });
 
