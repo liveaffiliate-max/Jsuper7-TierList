@@ -10,6 +10,39 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* custom animation utilities — ใช้เป็น animate-fade-up / animate-shimmer */
+  --animate-fade-up: fadeUp 0.45s ease;
+  --animate-shimmer: shimmer 1.2s linear infinite;
+
+  /* สำหรับ modal popup ของ TierListdetail.js — เข้า/ออกคนละ animation ตามสถานะ open/closing */
+  --animate-overlay-in: overlayIn 0.22s ease forwards;
+  --animate-overlay-out: overlayOut 0.25s ease forwards;
+  --animate-card-in: cardIn 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  --animate-card-out: cardOut 0.22s ease forwards;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position:  600px 0; }
+}
+
+@keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes overlayOut { from { opacity: 1; } to { opacity: 0; } }
+
+@keyframes cardIn {
+  from { opacity: 0; transform: scale(0.85) translateY(20px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes cardOut {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.9) translateY(12px); }
 }
 
 @media (prefers-color-scheme: dark) {
