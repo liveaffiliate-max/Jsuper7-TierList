@@ -126,6 +126,12 @@ export default function Dashboard({ user, onUserChange, onLogout }) {
         </button>
       </div>
 
+      {user.lastUpdated && (
+        <div className="text-center mb-4 text-[11px] text-white/60">
+          🕒 ข้อมูลอัพเดทล่าสุด: {user.lastUpdated}
+        </div>
+      )}
+
       {/* Dashboard content with overlay */}
       <div className="relative">
 

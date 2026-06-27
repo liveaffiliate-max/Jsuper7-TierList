@@ -1,4 +1,4 @@
-import { getSheetRows, normalizePhone, parseSheetNumber, sheetNameForOffset } from "../../lib/sheetsClient";
+import { getLastSyncTimestamp, getSheetRows, normalizePhone, parseSheetNumber, sheetNameForOffset } from "../../lib/sheetsClient";
 
 export async function POST(req) {
   try {
@@ -59,6 +59,8 @@ export async function POST(req) {
       total_sale: parseSheetNumber(user[11]),
 
       total_clip: parseSheetNumber(user[12]),
+
+      lastUpdated: await getLastSyncTimestamp(),
 
     });
 

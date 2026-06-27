@@ -74,3 +74,16 @@ export async function getSheetRows(sheetName) {
     throw err;
   }
 }
+
+// _sync_log คือชีท append-only ที่ updateTier.gs เขียนทุกครั้งที่ script รัน (sync คลิป/อัปเดต tier)
+// แถวล่าสุดของชีทนี้คือเวลาที่ข้อมูลถูกอัปเดตจริงล่าสุด — ใช้บอก user ว่าข้อมูลที่เห็นสดแค่ไหน
+// ถ้าอ่านไม่ได้ (เช่นชีทถูกลบ/ย้าย) ให้ return null เงียบๆ ไม่ทำให้ /api/check ทั้ง request ล้ม
+export async function getLastSyncTimestamp() {
+  try {
+    const rows = await getSheetRows("_sync_log");
+    const lastRow = rows[rows.length - 1];
+    return lastRow?.[0] || null;
+  } catch {
+    return null;
+  }
+}
