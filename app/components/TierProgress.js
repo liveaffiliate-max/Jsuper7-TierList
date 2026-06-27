@@ -1,179 +1,67 @@
 import React from "react";
-import { TIER_CONFIG, ALL_TIERS } from "../lib/tierConfig";
 
-export default function TierProgress({ totalSale, getTierInfo, TIER_CONFIG, variant }) {
+// วันที่เหลือในเดือนปัจจุบัน (รวมวันนี้) — ใช้สร้างความเร่งด่วน ไม่เกี่ยวกับ offset เดือนที่ดูอยู่
+function getDaysLeftInMonth() {
+  const now = new Date();
+  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  return lastDay - now.getDate() + 1;
+}
+
+export default function TierProgress({ totalSale, getTierInfo, TIER_CONFIG, isCurrentMonth }) {
   const info = getTierInfo(totalSale);
-  const isPanel = variant === "panel";
+  const daysLeft = getDaysLeftInMonth();
 
-  if (isPanel) {
-    return (
-      <div style={{ position: "relative", zIndex: 1 }}>
-
-        {info.next ? (
-          <>
-            {/* Tier labels */}
-            <div style={{
-              display: "flex",
-              justifyContent: "space-between",
-              fontSize: 12,
-              color: "rgba(255,255,255,0.65)",
-              marginBottom: 6,
-              fontWeight: 600,
-            }}>
-              <span>{TIER_CONFIG[info.current].icon} {info.current}</span>
-              <span>{TIER_CONFIG[info.next].icon} {info.next}</span>
-            </div>
-
-            {/* Progress bar */}
-            <div style={{
-              height: 5,
-              borderRadius: 99,
-              background: "rgba(255,255,255,0.2)",
-              overflow: "hidden",
-            }}>
-              <div style={{
-                height: "100%",
-                width: `${info.progress}%`,
-                background: "#ffffff",
-                borderRadius: 99,
-                transition: "width 1s ease",
-              }} />
-            </div>
-
-            {/* Remaining */}
-            <div style={{
-              marginTop: 8,
-              fontSize: 11,
-              color: "rgba(255,255,255,0.65)",
-            }}>
-              อีก{" "}
-              <span style={{ color: "#ffffff", fontWeight: 700 }}>
-                ฿{Math.ceil(info.remaining).toLocaleString()}
-              </span>
-              {" "}→ {info.next} {TIER_CONFIG[info.next].icon}
-            </div>
-          </>
-        ) : (
-          <>
-            <div style={{
-              height: 5,
-              borderRadius: 99,
-              background: "rgba(255,255,255,0.2)",
-              overflow: "hidden",
-            }}>
-              <div style={{
-                height: "100%",
-                width: "100%",
-                background: "#ffffff",
-                borderRadius: 99,
-              }} />
-            </div>
-            <div style={{
-              marginTop: 8,
-              fontSize: 11,
-              color: "rgba(255,255,255,0.85)",
-              fontWeight: 700,
-            }}>
-              ⭐ ถึง Tier สูงสุดแล้ว!
-            </div>
-          </>
-        )}
-      </div>
-    );
-  }
-
-  // --- Default variant (เดิม) ---
   return (
-    <div style={{
-      marginTop: 18,
-      background: "#ffffff",
-      borderRadius: 16,
-      padding: "16px 18px",
-      boxShadow: "0 8px 20px rgba(0,0,0,0.06)",
-      marginBottom: 20,
-    }}>
-      <div style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: 10,
-      }}>
-        <div style={{ fontSize: 18, fontWeight: 700, color: "#1e293b" }}>
-          📈 ความก้าวหน้า Tier
-        </div>
-        <div style={{ fontSize: 14, color: "#64748b", fontWeight: 600 }}>
-          {Math.round(info.progress)}%
-        </div>
+    <div className="mt-[18px] mb-5 bg-white rounded-2xl px-[18px] py-4 shadow-[0_8px_20px_rgba(0,0,0,0.06)]">
+      <div className="flex justify-between items-center mb-2.5">
+        <div className="text-lg font-bold text-[#1e293b]">📈 ความก้าวหน้า Tier</div>
+        <div className="text-sm text-[#64748b] font-semibold">{Math.round(info.progress)}%</div>
       </div>
 
       {info.next ? (
         <>
-          <div style={{
-            display: "flex",
-            justifyContent: "space-between",
-            fontSize: 16,
-            color: "#94a3b8",
-            marginBottom: 6,
-            fontWeight: 600,
-          }}>
+          <div className="flex justify-between text-base text-[#94a3b8] mb-1.5 font-semibold">
             <span>{TIER_CONFIG[info.current].icon} {info.current}</span>
             <span>{TIER_CONFIG[info.next].icon} {info.next}</span>
           </div>
 
-          <div style={{
-            height: 12,
-            borderRadius: 99,
-            background: "#e2e8f0",
-            overflow: "hidden",
-          }}>
-            <div style={{
-              height: "100%",
-              width: `${info.progress}%`,
-              background: `linear-gradient(90deg, ${TIER_CONFIG[info.current].color}, ${TIER_CONFIG[info.next].color})`,
-              borderRadius: 99,
-              transition: "width 1s ease",
-              boxShadow: `0 2px 8px ${TIER_CONFIG[info.next].color}55`,
-            }} />
+          <div className="h-3 rounded-full bg-[#e2e8f0] overflow-hidden">
+            <div
+              className="h-full rounded-full transition-[width] duration-1000"
+              style={{
+                width: `${info.progress}%`,
+                background: `linear-gradient(90deg, ${TIER_CONFIG[info.current].color}, ${TIER_CONFIG[info.next].color})`,
+                boxShadow: `0 2px 8px ${TIER_CONFIG[info.next].color}55`,
+              }}
+            />
           </div>
 
-          <div style={{
-            textAlign: "center",
-            marginTop: 12,
-            fontSize: 16,
-            color: "#64748b",
-            fontWeight: 600,
-          }}>
+          <div className="text-center mt-3 text-base text-[#64748b] font-semibold">
             อีก{" "}
-            <span style={{ color: "#ef4444", fontWeight: 700 }}>
+            <span className="text-[#ef4444] font-bold">
               ฿{Math.ceil(info.remaining).toLocaleString()}
             </span>
             {" "}จะขึ้น Tier {info.next} {TIER_CONFIG[info.next].icon}
           </div>
+
+          {isCurrentMonth && (
+            <div className={`text-center mt-1.5 text-xs font-semibold ${daysLeft <= 3 ? "text-[#ef4444]" : "text-[#94a3b8]"}`}>
+              ⏳ เหลือเวลาอีก {daysLeft} วันในเดือนนี้
+            </div>
+          )}
+
+          {TIER_CONFIG[info.next].reward?.[0] && (
+            <div className="mt-2.5 bg-[#f8fafc] border border-[#e2e8f0] rounded-xl px-3 py-2 text-xs text-[#475569] text-center">
+              🎁 ขึ้น Tier {info.next} : {TIER_CONFIG[info.next].reward[0]}
+            </div>
+          )}
         </>
       ) : (
         <>
-          <div style={{
-            height: 12,
-            borderRadius: 99,
-            background: "#ede9fe",
-            overflow: "hidden",
-            marginTop: 4,
-          }}>
-            <div style={{
-              height: "100%",
-              width: "100%",
-              background: "linear-gradient(90deg, #7c3aed, #a855f7)",
-              borderRadius: 99,
-              boxShadow: "0 2px 8px rgba(124,58,237,0.35)",
-            }} />
+          <div className="h-3 rounded-full bg-[#ede9fe] overflow-hidden mt-1">
+            <div className="h-full w-full rounded-full bg-gradient-to-r from-[#7c3aed] to-[#a855f7] shadow-[0_2px_8px_rgba(124,58,237,0.35)]" />
           </div>
-          <div style={{
-            textAlign: "center",
-            marginTop: 8,
-            fontSize: 16,
-            color: "#7c3aed",
-            fontWeight: 700,
-          }}>
+          <div className="text-center mt-2 text-base text-[#7c3aed] font-bold">
             ⭐ ถึง Tier สูงสุดแล้ว!
           </div>
         </>

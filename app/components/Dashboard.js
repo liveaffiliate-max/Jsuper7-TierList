@@ -176,6 +176,7 @@ export default function Dashboard({ user, onUserChange, onLogout }) {
           totalSale={user.total_sale}
           getTierInfo={getTierInfo}
           TIER_CONFIG={TIER_CONFIG}
+          isCurrentMonth={monthOffset === 0}
         />
 
         {/* Sale Cards */}
