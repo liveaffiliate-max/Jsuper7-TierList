@@ -8,6 +8,7 @@ import { getTierInfo } from "../lib/getTierInfo";
 import { fetchTierCheck } from "../lib/checkUser";
 import TierProgress from "./TierProgress";
 import TierListDetail from "./TierListdetail";
+import SalesTrend from "./SalesTrend";
 
 const TH_MONTHS = {
   Jan: "มกราคม",
@@ -189,6 +190,9 @@ export default function Dashboard({ user, onUserChange, onLogout }) {
           TIER_CONFIG={TIER_CONFIG}
           isCurrentMonth={monthOffset === 0}
         />
+
+        {/* แสดงกราฟเทรนด์เฉพาะตอนดูเดือนปัจจุบัน — ดูเดือนเก่าไม่ต้องดึงข้อมูลย้อนหลังซ้ำ */}
+        {monthOffset === 0 && <SalesTrend phone={user.phone} />}
 
         {/* Sale Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-[14px]">
