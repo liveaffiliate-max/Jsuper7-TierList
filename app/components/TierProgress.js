@@ -15,7 +15,9 @@ export default function TierProgress({ totalSale, getTierInfo, TIER_CONFIG, isCu
     <div className="mt-[18px] mb-5 bg-white rounded-2xl px-[18px] py-4 shadow-[0_8px_20px_rgba(0,0,0,0.06)]">
       <div className="flex justify-between items-center mb-2.5">
         <div className="text-lg font-bold text-[#1e293b]">📈 ความก้าวหน้า Tier</div>
-        <div className="text-sm text-[#64748b] font-semibold">{Math.round(info.progress)}%</div>
+        {isCurrentMonth && (
+          <div className="text-sm text-[#64748b] font-semibold">{Math.round(info.progress)}%</div>
+        )}
       </div>
 
       {info.next ? (
@@ -50,7 +52,7 @@ export default function TierProgress({ totalSale, getTierInfo, TIER_CONFIG, isCu
             </div>
           )}
 
-          {TIER_CONFIG[info.next].reward?.[0] && (
+          {isCurrentMonth && TIER_CONFIG[info.next].reward?.[0] && (
             <div className="mt-2.5 bg-[#f8fafc] border border-[#e2e8f0] rounded-xl px-3 py-2 text-xs text-[#475569] text-center">
               🎁 ขึ้น Tier {info.next} : {TIER_CONFIG[info.next].reward[0]}
             </div>
