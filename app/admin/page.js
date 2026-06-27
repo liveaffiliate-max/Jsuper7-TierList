@@ -58,7 +58,7 @@ export default function AdminLogin() {
       <div style={styles.card}>
         {/* Logo */}
         <div style={styles.logoBox}>
-          <img src="/jsuper7_jknowlogo.png" alt="Jsuper7 Logo" />
+          <Image src="/jsuper7_jknowlogo.png" alt="Jsuper7 Logo" width={1040} height={560} />
         </div>
 
         <h2 style={styles.title}>Admin Jknowledge</h2>
