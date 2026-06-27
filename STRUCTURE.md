@@ -39,13 +39,9 @@ Jsuper7-TierList/
 │   │   ├── TierProgress.js          ← Progress bar ไปยัง Tier ถัดไป
 │   │   └── TierListdetail.js        ← Grid 4 Tier + popup รายละเอียดเงื่อนไข/สิทธิพิเศษ
 │   │
-│   ├── api/
-│   │   ├── check/route.js           ← API หลัก: ค้นหาสมาชิกจาก Google Sheets ตามเดือน (มี cache 60s)
-│   │   └── sheet/route.js           ← API เก่า: อ่านชีทชื่อตายตัว (ไม่ได้ใช้แล้วในหน้า UI ปัจจุบัน)
-│   │
-│   └── admin/
-│       ├── page.js                  ← หน้า Login Admin (⚠️ backend /api/admin/login ถูกลบไปแล้ว — ใช้งานไม่ได้)
-│       └── dashboard/page.js        ← เมนู Admin (ลิงก์ไปหน้าที่ยังไม่มีอยู่จริง: /admin/clips, /admin/users ฯลฯ)
+│   └── api/
+│       ├── check/route.js           ← API หลัก: ค้นหาสมาชิกจาก Google Sheets ตามเดือน (มี cache 60s)
+│       └── check/history/route.js   ← ดึงยอดขายย้อนหลัง 6 เดือน ใช้กับกราฟเทรนด์
 │
 ├── public/                          ← โลโก้ของแต่ละช่องทาง + พื้นหลัง
 │
@@ -111,8 +107,8 @@ Spreadsheet มีทั้งหมด **8 ชีท** ไม่ใช่แค
 
 | ชีท | เนื้อหา | ใช้ในโค้ดปัจจุบัน? |
 |-----|---------|---------------------|
-| `admin_login` | username/password เก็บเป็น **plain text** | ❌ ไม่ใช้แล้ว (`/api/admin/login` ถูกลบ) — ⚠️ ยังเป็นความเสี่ยงด้าน security ถ้า service account ใน `.env` รั่ว |
-| `_sync_log` | log จาก **Google Apps Script `updateTier.gs`** ที่รันอยู่ใน spreadsheet เดียวกัน (ฟังก์ชัน `_logToSheet()`) — ยืนยันแล้ว ไม่ใช่ระบบนอก repo ที่ไม่รู้จัก | ❌ ไม่ใช้ในโค้ด Next.js แต่เป็นส่วนสำคัญของระบบ — ดูหัวข้อด้านล่าง |
+| `admin_login` | username/password เก็บเป็น **plain text** | ❌ ไม่ใช้แล้ว — เดิมเป็น credential store ของ `/api/admin/login` ซึ่งถูกลบไปแล้ว และตอนนี้ทั้งหน้า `/admin` ก็ถูกลบออกจาก repo แล้วด้วย — ⚠️ ยังเป็นความเสี่ยงด้าน security ถ้า service account ใน `.env` รั่ว |
+| `_sync_log` | log จาก **Google Apps Script `updateTier.gs`** ที่รันอยู่ใน spreadsheet เดียวกัน (ฟังก์ชัน `_logToSheet()`) — ยืนยันแล้ว ไม่ใช่ระบบนอก repo ที่ไม่รู้จัก | ✅ ใช้แล้ว — `getLastSyncTimestamp()` ใน `app/lib/sheetsClient.js` อ่านแถวล่าสุดมาโชว์เป็น "ข้อมูลอัพเดทล่าสุด" บน Dashboard |
 | `Tierlist_Jan` … `Tierlist_Jun` | ข้อมูลยอดขายรายเดือน (ตรงกับ pattern `Tierlist_<เดือน>` ที่ `app/api/check/route.js` ใช้) | ✅ ใช้งานจริง |
 
 ### Column mapping ของชีท `Tierlist_*` (ยืนยัน index ตรงกับโค้ด)
@@ -206,7 +202,7 @@ Tierlist_<เดือนนี้> (Col K Tier) ← เขียน Tier ให
 ## สิ่งที่ควรรู้ก่อนแก้โค้ด
 
 1. **Column index แบบตายตัว** — `app/api/check/route.js` อ่านข้อมูลจาก sheet โดยอ้าง index คอลัมน์ตรงๆ (`row[3]` = เบอร์โทร, `row[11]` = total_sale ฯลฯ) ถ้ามีคนแก้ลำดับคอลัมน์ใน Google Sheet โค้ดจะพังแบบเงียบๆ (ได้ค่าผิดคอลัมน์ ไม่ error) — **ยืนยันแล้วว่าเกิดขึ้นจริง** กับ column M (`total_clip`) ในเดือน Jan ดูหัวข้อด้านบน
-2. **Admin section ใช้งานไม่ได้แล้ว** — API ฝั่ง admin (`/api/admin/login`, `/api/clips` ฯลฯ) ถูกลบออกจากโปรเจคแล้ว แต่หน้า `/admin` ยังเรียกอยู่ และ sheet `admin_login` ที่เคยใช้ตรวจสอบยังเก็บ username/password เป็น **plain text** อยู่ในสเปรดชีทเดียวกับข้อมูลยอดขาย
+2. **Admin section ถูกลบออกจาก repo แล้ว** — API ฝั่ง admin (`/api/admin/login`, `/api/clips` ฯลฯ) ถูกลบไปก่อนหน้านี้ และตอนนี้หน้า `/admin` (login form + dashboard menu ที่เรียก API เหล่านั้น) ก็ถูกลบออกแล้วด้วยเพราะใช้งานไม่ได้ตั้งแต่ API ถูกลบ ไม่มี route `/admin` เหลืออยู่ในแอปอีก แต่ sheet `admin_login` ที่เคยใช้ตรวจสอบยังเก็บ username/password เป็น **plain text** อยู่ในสเปรดชีทเดียวกับข้อมูลยอดขาย — ยังเป็นความเสี่ยง security ถ้า service account รั่ว
 3. **มี bug ที่ยังไม่แก้** — ดูรายละเอียดใน [CODE_REVIEW.md](CODE_REVIEW.md) โดยเฉพาะเรื่อง tier แสดงผิดถ้าช่องยอดขายว่างเปล่า
 4. **มี Google Apps Script ([appscript/updateTier.gs](appscript/updateTier.gs)) รันอยู่ในสเปรดชีทเดียวกัน นอก repo นี้** — รวม 4 ระบบย่อย (Tier update / นับคลิป / Import ยอดขาย TikTok / Mark ซ้ำ) ดูรายละเอียดในหัวข้อ "ระบบ Automate ใน Google Apps Script" — ควรระวังเวลาแก้ไข schema ของ sheet (เพิ่ม/ลบ/สลับคอลัมน์) เพราะจะกระทบสคริปต์นี้ด้วย ไม่ใช่กระทบแค่ Next.js — ไฟล์ใน repo เป็นแค่ reference เก็บไว้ดู ไม่ได้ sync กับตัวจริงใน Apps Script editor อัตโนมัติ
 5. **Boundary mismatch ระหว่าง GAS กับ `tierConfig.js`** — ยอดขายเป๊ะ 200,000/50,000/10,000 บาท จะได้ Tier ไม่ตรงกันระหว่าง sheet กับ progress bar เพราะ `updateTier.gs` ใช้ `>` แต่ `tierConfig.js` ใช้ `>=` — ต้องแก้ใน `.gs` ให้ตรงกัน (ยังไม่แก้ — ตั้งใจข้ามไว้ก่อน)

@@ -8,13 +8,11 @@ Ranked most severe first.
 
 ## 1. Admin login is completely broken
 
-**File:** [app/admin/page.js:29](app/admin/page.js#L29)
+**File:** ~~`app/admin/page.js`~~ (deleted)
 **Severity:** High
-**Status:** ⏸️ Not fixed — intentionally skipped (admin section deferred, not currently in use)
+**Status:** ✅ Resolved — `app/admin/page.js` and `app/admin/dashboard/page.js` removed entirely. There is no `/admin` route in the app at all now, so there's no dead login form left to confuse anyone. If admin functionality is needed again, it should be rebuilt from scratch with a real backend (the `admin_login` sheet still exists as a potential credential store — see CLAUDE.md).
 
-Admin login `fetch`-es `/api/admin/login`, but that API route was deleted in commit `10387dd`, and nothing else (no rewrite, no middleware) serves that path.
-
-**Failure scenario:** Admin submits username/password on `/admin` → fetch hits Next.js's 404 handler → `res.json()` throws on the HTML body → caught by the surrounding try/catch → user sees the generic `"เกิดข้อผิดพลาดของระบบ"` message. Admin login is non-functional for every user, every time.
+Previously: admin login `fetch`-ed `/api/admin/login`, but that API route was deleted in commit `10387dd`, and nothing else (no rewrite, no middleware) served that path, so the form was non-functional for every user, every time.
 
 ---
 

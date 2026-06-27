@@ -70,9 +70,9 @@ Inline `style={{ ... }}` props still appear in a few spots — these are not lef
 
 Fonts (Prompt, Kanit, Sarabun) are loaded via `next/font/google` in `app/layout.js`, exposed as CSS variables (`--font-prompt`, `--font-kanit`, `--font-sarabun`) on `<body>`, and referenced as `var(--font-prompt)` etc. in component styles — not via `@import url(fonts.googleapis.com/...)` (that pattern was removed; if you see it reintroduced, it's a regression).
 
-### Admin section is partially dismantled
+### Admin section was removed
 
-`app/admin/page.js` (login form) and `app/admin/dashboard/page.js` (menu linking to `/admin/clips`, `/admin/all-clips`, `/admin/users`) still exist, but the API routes and pages they depend on (`/api/admin/login`, `/api/admin/clips`, `/api/clips`, `/api/upload_clip`, `/my-clip`, `/submit-clip`) have been deleted from the codebase. The admin login currently has no working backend — don't assume `/admin` is functional without checking what API routes actually exist under `app/api/`. The `admin_login` sheet (see above) is the credential store the deleted route presumably checked against — if this gets restored, that's the sheet to read.
+`app/admin/page.js` (login form) and `app/admin/dashboard/page.js` (menu linking to `/admin/clips`, `/admin/all-clips`, `/admin/users`) were deleted — the API routes and pages they depended on (`/api/admin/login`, `/api/admin/clips`, `/api/clips`, `/api/upload_clip`, `/my-clip`, `/submit-clip`) had already been deleted earlier, leaving a login form with no working backend. There is currently no `/admin` route at all. The `admin_login` sheet (see above) is the credential store the deleted route presumably checked against — if an admin section gets rebuilt, that's the sheet to read.
 
 ### Analytics
 
