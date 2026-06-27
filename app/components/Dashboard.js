@@ -26,6 +26,12 @@ const TH_MONTHS = {
 
 const getThaiMonth = (month) => TH_MONTHS[month] || month;
 
+// แปลง "5,665.79" หรือ "" จาก sheet ให้เป็น number กันพังเวลาเทียบว่าช่องไหนยังไม่มียอด
+const parseMoney = (value) => {
+  const num = parseFloat(String(value ?? "").replace(/,/g, ""));
+  return isNaN(num) ? 0 : num;
+};
+
 export default function Dashboard({ user, onUserChange, onLogout }) {
   const [monthOffset, setMonthOffset] = useState(0);
   const [monthLoading, setMonthLoading] = useState(false);
@@ -38,6 +44,11 @@ export default function Dashboard({ user, onUserChange, onLogout }) {
   // fallback เป็น Start กันกรณี sheet มีค่า tier ที่ไม่ตรงกับ config ไหนเลย
   const userTierName = user?.tier?.replace(/[^\p{L}\p{N}]/gu, "");
   const panelCfg = TIER_CONFIG[userTierName] || TIER_CONFIG.Start;
+
+  // ชี้จุดอ่อนรายช่องทาง — ช่องที่ยอดเป็น 0 ให้ขึ้น badge เตือนเป็นจุดที่ควรลงมือทำเพิ่ม
+  const saleUni = parseMoney(user.sale_uni);
+  const saleExam = parseMoney(user.sale_exam);
+  const saleShopee = parseMoney(user.shopee);
 
   const getMonthLabel = () => {
     const now = new Date();
@@ -181,21 +192,36 @@ export default function Dashboard({ user, onUserChange, onLogout }) {
 
         {/* Sale Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-[14px]">
-          <div className="bg-white p-5 rounded-2xl text-center shadow-[0_4px_16px_rgba(0,0,0,0.07)] transition-transform hover:-translate-y-0.5 flex flex-col relative">
+          <div className={`bg-white p-5 rounded-2xl text-center shadow-[0_4px_16px_rgba(0,0,0,0.07)] transition-transform hover:-translate-y-0.5 flex flex-col relative${saleUni === 0 ? " ring-2 ring-[#fbbf24]" : ""}`}>
+            {saleUni === 0 && (
+              <span className="absolute top-2 right-2 text-[10px] font-bold bg-[#fef3c7] text-[#b45309] px-2 py-0.5 rounded-full">
+                ยังไม่มียอด
+              </span>
+            )}
             <Image src="/logo_jknow.png" alt="JKnowledge" width={4500} height={4500} className="w-20 mx-auto mb-2.5" />
             <h3 className="text-sm font-semibold text-[#334155] leading-[1.3]">หนังสือเตรียมสอบมหาลัย</h3>
             <p className="text-xs text-[#94a3b8] mt-1 mb-3">(Tiktok)</p>
             <h2 className="text-xl md:text-[22px] font-bold text-[#ef4444] mt-auto pt-3 border-t border-[#f1f5f9]">฿{user.sale_uni}</h2>
           </div>
 
-          <div className="bg-white p-5 rounded-2xl text-center shadow-[0_4px_16px_rgba(0,0,0,0.07)] transition-transform hover:-translate-y-0.5 flex flex-col relative">
+          <div className={`bg-white p-5 rounded-2xl text-center shadow-[0_4px_16px_rgba(0,0,0,0.07)] transition-transform hover:-translate-y-0.5 flex flex-col relative${saleExam === 0 ? " ring-2 ring-[#fbbf24]" : ""}`}>
+            {saleExam === 0 && (
+              <span className="absolute top-2 right-2 text-[10px] font-bold bg-[#fef3c7] text-[#b45309] px-2 py-0.5 rounded-full">
+                ยังไม่มียอด
+              </span>
+            )}
             <Image src="/logo_jkorpor.png" alt="Jkorpor" width={4500} height={4500} className="w-20 mx-auto mb-2.5" />
             <h3 className="text-sm font-semibold text-[#334155] leading-[1.3]">หนังสือเตรียมสอบราชการ</h3>
             <p className="text-xs text-[#94a3b8] mt-1 mb-3">(Tiktok)</p>
             <h2 className="text-xl md:text-[22px] font-bold text-[#ef4444] mt-auto pt-3 border-t border-[#f1f5f9]">฿{user.sale_exam}</h2>
           </div>
 
-          <div className="bg-white p-5 rounded-2xl text-center shadow-[0_4px_16px_rgba(0,0,0,0.07)] transition-transform hover:-translate-y-0.5 flex flex-col relative">
+          <div className={`bg-white p-5 rounded-2xl text-center shadow-[0_4px_16px_rgba(0,0,0,0.07)] transition-transform hover:-translate-y-0.5 flex flex-col relative${saleShopee === 0 ? " ring-2 ring-[#fbbf24]" : ""}`}>
+            {saleShopee === 0 && (
+              <span className="absolute top-2 right-2 text-[10px] font-bold bg-[#fef3c7] text-[#b45309] px-2 py-0.5 rounded-full">
+                ยังไม่มียอด
+              </span>
+            )}
             <Image src="/logo_shopee.png" alt="Shopee" width={4500} height={4500} className="w-20 mx-auto mb-2.5" />
             <h3 className="text-sm font-semibold text-[#334155] leading-[1.3]">JKnowledge Shop</h3>
             <p className="text-xs text-[#94a3b8] mt-1 mb-3">(Shopee)</p>
